@@ -15,8 +15,7 @@ CREATE TABLE perguntas (
 CREATE TABLE ranking (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    pontuacao INT NOT NULL,
-    data DATE NOT NULL
+    pontuacao INT NOT NULL
 );
 
 INSERT INTO perguntas (enunciado, opcao1, opcao2, opcao3, opcao4, resposta_correta) VALUES
