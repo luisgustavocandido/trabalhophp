@@ -3,10 +3,17 @@ session_start();
 include 'conexao_bd.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['respostas'] = $_POST['respostas'];
-    $_SESSION['nome'] = $_POST['nome'];
-    header('Location: resultado.php');
-    exit();
+    $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
+    $respostas = filter_input(INPUT_POST, 'respostas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+
+    if ($nome && $respostas) {
+        $_SESSION['respostas'] = $respostas;
+        $_SESSION['nome'] = $nome;
+        header('Location: resultado.php');
+        exit();
+    } else {
+        $error = "Por favor, preencha todas as perguntas.";
+    }
 }
 
 $sql = "SELECT * FROM perguntas";
@@ -17,6 +24,8 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $perguntas[] = $row;
     }
+} else {
+    die("Erro ao buscar perguntas: " . $conn->error);
 }
 ?>
 
@@ -31,6 +40,11 @@ if ($result->num_rows > 0) {
 <body>
     <div class="container mt-5">
         <h1 class="text-center">Perguntas do Quiz</h1>
+        <?php if (isset($error)) : ?>
+            <div class="alert alert-danger">
+                <?php echo $error; ?>
+            </div>
+        <?php endif; ?>
         <form method="POST" action="perguntas.php">
             <div class="form-group">
                 <label for="nome">Seu Nome:</label>
@@ -38,23 +52,13 @@ if ($result->num_rows > 0) {
             </div>
             <?php foreach ($perguntas as $index => $pergunta) : ?>
                 <div class="mb-4">
-                    <h4><?php echo $pergunta['enunciado']; ?></h4>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="respostas[<?php echo $pergunta['id']; ?>]" value="<?php echo $pergunta['opcao1']; ?>" required>
-                        <label class="form-check-label"><?php echo $pergunta['opcao1']; ?></label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="respostas[<?php echo $pergunta['id']; ?>]" value="<?php echo $pergunta['opcao2']; ?>" required>
-                        <label class="form-check-label"><?php echo $pergunta['opcao2']; ?></label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="respostas[<?php echo $pergunta['id']; ?>]" value="<?php echo $pergunta['opcao3']; ?>" required>
-                        <label class="form-check-label"><?php echo $pergunta['opcao3']; ?></label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="respostas[<?php echo $pergunta['id']; ?>]" value="<?php echo $pergunta['opcao4']; ?>" required>
-                        <label class="form-check-label"><?php echo $pergunta['opcao4']; ?></label>
-                    </div>
+                    <h4><?php echo htmlspecialchars($pergunta['enunciado']); ?></h4>
+                    <?php for ($i = 1; $i <= 4; $i++) : ?>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="respostas[<?php echo $pergunta['id']; ?>]" value="<?php echo htmlspecialchars($pergunta['opcao' . $i]); ?>" required>
+                            <label class="form-check-label"><?php echo htmlspecialchars($pergunta['opcao' . $i]); ?></label>
+                        </div>
+                    <?php endfor; ?>
                 </div>
             <?php endforeach; ?>
             <div class="text-center">

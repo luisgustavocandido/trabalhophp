@@ -23,4 +23,4 @@ INSERT INTO perguntas (enunciado, opcao1, opcao2, opcao3, opcao4, resposta_corre
 ('Quantos títulos estaduais o Londrina EC possui?', '2', '3', '4', '5', '5'),
 ('Qual é o mascote do Londrina EC?', 'Tubarão', 'Leão', 'Águia', 'Tigre', 'Tubarão'),
 ('Em que estádio o Londrina EC manda seus jogos?', 'Estádio do Café', 'Maracanã', 'Mineirão', 'Morumbi', 'Estádio do Café'),
-('Em que ano o Londrina EC ganhou a Copa da Primeira Liga', '2014', '2020', '1978', '2017', '2017');
+('Em que ano o Londrina EC ganhou a Copa da Primeira Liga?', '2014', '2020', '1978', '2017', '2017');

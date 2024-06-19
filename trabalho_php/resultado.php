@@ -6,14 +6,14 @@ $score = 0;
 
 if (isset($_SESSION['respostas']) && isset($_SESSION['nome'])) {
     $respostas_usuario = $_SESSION['respostas'];
-    $nome = $_SESSION['nome'];
+    $nome = filter_var($_SESSION['nome'], FILTER_SANITIZE_STRING);
     
     $sql = "SELECT * FROM perguntas";
     $result = $conn->query($sql);
     
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            if ($respostas_usuario[$row['id']] == $row['resposta_correta']) {
+            if ($respostas_usuario[$row['id']] === $row['resposta_correta']) {
                 $score++;
             }
         }
@@ -23,6 +23,8 @@ if (isset($_SESSION['respostas']) && isset($_SESSION['nome'])) {
     $stmt->bind_param("si", $nome, $score);
     $stmt->execute();
     $stmt->close();
+} else {
+    die("Erro ao processar resultados.");
 }
 
 session_destroy();

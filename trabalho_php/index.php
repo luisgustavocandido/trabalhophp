@@ -12,7 +12,6 @@
             <div class="col-md-6">
                 <img src="https://upload.wikimedia.org/wikipedia/pt/8/83/LondrinaEC.png" class="img-fluid img-thumbnail mx-auto d-block" alt="Logo do Londrina EC" style="max-width: 200px;">
             </div>
-
         </div>
         <div class="row mt-4">
             <div class="col-md-12">
